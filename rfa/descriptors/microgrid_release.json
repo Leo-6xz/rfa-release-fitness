@@ -1,0 +1,20 @@
+{
+  "name": "microgrid_release",
+  "adapter": "folder_per_stratum",
+  "root": "C:/research/mgxrl/Dataset",
+  "strata": ["Normal", "Additive", "Ramp", "SlowRamp", "Sinusoid", "Stealth", "DoS"],
+  "null_stratum": "Normal",
+  "file_glob": "*.csv",
+  "time_column": "time",
+  "label_column": "label",
+  "channels": "auto",
+  "ac_channels": ["v1", "v2", "v3", "i1", "i2", "i3"],
+  "bounds": {"default": 1.0e7},
+  "sample_interval_s": 2.0e-6,
+  "physical_dt_s": 0.01,
+  "window": 20,
+  "stride": 5,
+  "differential": {"baseline_stratum": "Normal", "channels": ["p_dg", "f_dg"]},
+  "unit_of_independence": "one CSV file (simulation run) per scenario folder",
+  "claims": ["K1", "K2", "K3", "K4"]
+}

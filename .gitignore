@@ -1,0 +1,5 @@
+.venv/
+pvdaq/
+results/
+__pycache__/
+*.pyc

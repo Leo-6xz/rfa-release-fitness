@@ -1,0 +1,14 @@
+{
+  "name": "pvdaq",
+  "adapter": "pvdaq_catalogue",
+  "catalogue": "pvdaq/systems.csv",
+  "listing_cache": "pvdaq/listing_cache.json",
+  "min_years": 3,
+  "max_interval_min": 20,
+  "min_days": 330,
+  "n_years": 2,
+  "min_distance_km": 100,
+  "sensitivity_km": [200, 100, 50, 25, 10],
+  "unit_of_independence": "PV system (site_id); independence tested by distance",
+  "claims": ["K2"]
+}
