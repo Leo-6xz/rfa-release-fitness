@@ -165,8 +165,8 @@ def pre_event(D, y):
     return D[:k]
 
 
-def max_independent(adj):
-    """Exact maximum independent set size (branch and bound)."""
+def _mis_exact(adj):
+    """Exact maximum independent set size of ONE small connected graph."""
     n = len(adj)
     nbrs = [set(np.flatnonzero(adj[i])) for i in range(n)]
     best = [0]
@@ -177,7 +177,6 @@ def max_independent(adj):
         if not cands:
             best[0] = max(best[0], size)
             return
-        # vertices with no remaining neighbours are always taken
         free = {v for v in cands if not (nbrs[v] & cands)}
         if free:
             rec(cands - free, size + len(free))
@@ -188,6 +187,27 @@ def max_independent(adj):
 
     rec(set(range(n)), 0)
     return best[0]
+
+
+def max_independent(adj):
+    """Exact maximum independent set size. The graph is split into connected
+    components first and each is solved separately; without this, many small
+    dependent pairs (e.g. duplicated units) make the search exponential in the
+    number of pairs (v1.0.0 hung on 84 duplicates)."""
+    adj = np.asarray(adj, bool)
+    if adj.size == 0:
+        return 0
+    comp = components(adj)
+    total = 0
+    for c in np.unique(comp):
+        idx = np.flatnonzero(comp == c)
+        if len(idx) == 1:
+            total += 1
+        elif len(idx) == 2:
+            total += 1                      # two units, dependent on each other
+        else:
+            total += _mis_exact(adj[np.ix_(idx, idx)])
+    return total
 
 
 def components(adj):
