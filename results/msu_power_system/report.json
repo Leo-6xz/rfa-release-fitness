@@ -1,0 +1,232 @@
+{
+  "dataset": "msu_power_system",
+  "generated": "2026-11-09T12:30:55",
+  "spec_version": "1.0.0",
+  "spec_hash": "8ffc444dbc915624",
+  "descriptor": {
+    "name": "msu_power_system",
+    "adapter": "tabular_grouped",
+    "files": "msu/multiclass/data*.csv",
+    "unit_column": "marker",
+    "label_column": "marker",
+    "strata": [
+      "Natural",
+      "Attack"
+    ],
+    "null_stratum": "Natural",
+    "class_of_unit": {
+      "Natural": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        13,
+        14,
+        41
+      ]
+    },
+    "default_class": "Attack",
+    "channels": "auto",
+    "bounds": {
+      "default": 10000000.0
+    },
+    "unit_of_independence": "scenario (multiclass label 1-41); every data file samples all 37 scenarios, so files are not units",
+    "task": "binary: natural events or no events vs. attack, as in the binaryAllNaturalPlusNormalVsAttacks version",
+    "claims": [
+      "K1",
+      "K2",
+      "K3"
+    ]
+  },
+  "descriptor_hash": "c761a0325f00b852",
+  "python": "3.14.6",
+  "repeats_override": null,
+  "checks": {
+    "C1": {
+      "id": "C1",
+      "status": "FAIL",
+      "metric": 0.0804317593171466,
+      "metric_name": "fraction of rows corrupted",
+      "detail": {
+        "rows": 78377,
+        "corrupt_rows": 6304,
+        "nonfinite_cells": 10906,
+        "channels_affected": 4,
+        "per_class_fraction": {
+          "Natural": 0.09183763317777582,
+          "Attack": 0.07577744641862638
+        },
+        "per_unit_fraction": {
+          "1": 0.16372489348752284,
+          "10": 0.07929264118653737,
+          "11": 0.09233176838810642,
+          "12": 0.07590422822210902,
+          "13": 0.10560625814863103,
+          "14": 0.10366197183098591,
+          "15": 0.11885546588407923,
+          "16": 0.103397341211226,
+          "17": 0.12079510703363915,
+          "18": 0.1056,
+          "19": 0.12185089974293059,
+          "2": 0.13666300768386389,
+          "20": 0.1041529334212261,
+          "21": 0.10628019323671498,
+          "22": 0.12878787878787878,
+          "23": 0.06755218216318785,
+          "24": 0.07156862745098039,
+          "25": 0.07013301088270858,
+          "26": 0.0786088613625536,
+          "27": 0.06932515337423313,
+          "28": 0.07811741872877244,
+          "29": 0.08035714285714286,
+          "3": 0.14364364364364365,
+          "30": 0.07221283783783784,
+          "35": 0.0,
+          "36": 0.07235859124866595,
+          "37": 0.12665684830633284,
+          "38": 0.0,
+          "39": 0.0,
+          "4": 0.09973045822102426,
+          "40": 0.016148325358851676,
+          "41": 0.0,
+          "5": 0.08398184176394292,
+          "6": 0.10903873744619799,
+          "7": 0.11735769501054111,
+          "8": 0.12649164677804295,
+          "9": 0.11741528762805359
+        }
+      }
+    },
+    "C1d": {
+      "id": "C1d",
+      "status": "NA",
+      "metric": null,
+      "metric_name": "",
+      "detail": {}
+    },
+    "C2": {
+      "id": "C2",
+      "status": "PASS",
+      "metric": 128,
+      "metric_name": "declared channels present and non-empty (no sampling interval declared)",
+      "detail": {
+        "missing": [],
+        "empty": []
+      }
+    },
+    "C3": {
+      "id": "C3",
+      "status": "CONDITIONAL",
+      "metric": 9,
+      "metric_name": "min declared units per class (dependence untestable, so an upper bound)",
+      "detail": {
+        "per_class": {
+          "Natural": 9,
+          "Attack": 28
+        }
+      }
+    },
+    "C4": {
+      "id": "C4",
+      "status": "NA",
+      "metric": null,
+      "metric_name": "untestable: no trajectories or coordinates released",
+      "detail": {}
+    },
+    "C5": {
+      "id": "C5",
+      "status": "FAIL",
+      "metric": 0.26575407878549284,
+      "metric_name": "macro-F1 random minus grouped (whole units held out)",
+      "detail": {
+        "macro_f1": {
+          "random": [
+            0.7776211438509738,
+            0.002444467482643115
+          ],
+          "grouped": [
+            0.511867065065481,
+            0.013028369845976481
+          ]
+        },
+        "per_repeat": {
+          "random": [
+            0.774179600407491,
+            0.7796246980960695,
+            0.779059133049361
+          ],
+          "grouped": [
+            0.5300840763320845,
+            0.5003683697640454,
+            0.505148749100313
+          ]
+        },
+        "repeats": 3
+      }
+    },
+    "C5g": {
+      "id": "C5g",
+      "status": "PASS",
+      "metric": 9,
+      "metric_name": "min units per class",
+      "detail": {
+        "needed": 3
+      }
+    },
+    "C6": {
+      "id": "C6",
+      "status": "PASS",
+      "metric": -0.020287957918617372,
+      "metric_name": "artefact-only (corruption pattern) macro-F1 minus chance",
+      "detail": {
+        "artefact_only_macro_f1": 0.4793718252493238,
+        "chance_macro_f1": 0.4996597831679412,
+        "features": "per-column non-finite/out-of-bound indicator"
+      }
+    },
+    "C7": {
+      "id": "C7",
+      "status": "PASS",
+      "metric": 55663,
+      "metric_name": "min event rows per class",
+      "detail": {
+        "per_class": {
+          "Attack": 55663
+        }
+      }
+    },
+    "C8": {
+      "id": "C8",
+      "status": "NA",
+      "metric": null,
+      "metric_name": "no baseline declared",
+      "detail": {}
+    }
+  },
+  "claims": {
+    "K1": {
+      "claim": "In-distribution accuracy",
+      "verdict": "FAIL",
+      "because": [
+        "C1 FAIL (hard)"
+      ]
+    },
+    "K2": {
+      "claim": "Generalization to unseen units",
+      "verdict": "FAIL",
+      "because": [
+        "C1 FAIL (hard)",
+        "C3 CONDITIONAL (hard)"
+      ]
+    },
+    "K3": {
+      "claim": "Per-class performance",
+      "verdict": "FAIL",
+      "because": [
+        "C1 FAIL (hard)"
+      ]
+    }
+  }
+}

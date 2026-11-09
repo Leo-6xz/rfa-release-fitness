@@ -1,0 +1,16 @@
+{
+  "name": "msu_power_system",
+  "adapter": "tabular_grouped",
+  "files": "msu/multiclass/data*.csv",
+  "unit_column": "marker",
+  "label_column": "marker",
+  "strata": ["Natural", "Attack"],
+  "null_stratum": "Natural",
+  "class_of_unit": {"Natural": [1, 2, 3, 4, 5, 6, 13, 14, 41]},
+  "default_class": "Attack",
+  "channels": "auto",
+  "bounds": {"default": 1.0e7},
+  "unit_of_independence": "scenario (multiclass label 1-41); every data file samples all 37 scenarios, so files are not units",
+  "task": "binary: natural events or no events vs. attack, as in the binaryAllNaturalPlusNormalVsAttacks version",
+  "claims": ["K1", "K2", "K3"]
+}

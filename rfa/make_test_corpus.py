@@ -1,9 +1,6 @@
 """
 make_test_corpus.py -- small stand-in corpora for testing the workflow's code.
 
-NOT for the paper. The paper runs on the IEEE DataPort release, the synthetic
-corpus from scripts/09_generate_detector_dataset.py, and PVDAQ.
-
     clean         R independent runs per class, random onset, 1 kHz
     release_like  one run per class, fixed onset, attack files sharing the Normal
                   solve before onset, DoS from a different solve, and divergent

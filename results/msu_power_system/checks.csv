@@ -1,0 +1,11 @@
+check,name,status,metric,metric_name
+C1,Integrity,FAIL,0.0804317593171466,fraction of rows corrupted
+C1d,Integrity,NA,,
+C2,Metadata fidelity,PASS,128.0,declared channels present and non-empty (no sampling interval declared)
+C3,Effective sample size,CONDITIONAL,9.0,"min declared units per class (dependence untestable, so an upper bound)"
+C4,Unit of independence,NA,,untestable: no trajectories or coordinates released
+C5,Split-protocol sensitivity,FAIL,0.26575407878549284,macro-F1 random minus grouped (whole units held out)
+C5g,Split-protocol sensitivity,PASS,9.0,min units per class
+C6,Shortcut probe,PASS,-0.020287957918617372,artefact-only (corruption pattern) macro-F1 minus chance
+C7,Per-class floor,PASS,55663.0,min event rows per class
+C8,Differential admissibility,NA,,no baseline declared

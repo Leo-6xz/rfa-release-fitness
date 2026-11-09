@@ -1,7 +1,7 @@
 """
 inject_defects.py -- does the workflow catch what it claims to catch?
 
-Loads a CLEAN labelled corpus once, then builds six variants, each with exactly
+Loads a CLEAN labeled corpus once, then builds six variants, each with exactly
 one planted defect, and runs every check on the clean corpus and on each
 variant. A defect is DETECTED when the check aimed at it moves to a worse
 verdict than it has on the clean corpus. Any OTHER check that changes verdict is

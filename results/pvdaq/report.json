@@ -1,0 +1,134 @@
+{
+  "dataset": "pvdaq",
+  "generated": "2026-11-07T07:48:24",
+  "spec_version": "1.0.0",
+  "spec_hash": "8ffc444dbc915624",
+  "descriptor": {
+    "name": "pvdaq",
+    "adapter": "pvdaq_catalogue",
+    "catalogue": "pvdaq/systems.csv",
+    "listing_cache": "pvdaq/listing_cache.json",
+    "min_years": 3,
+    "max_interval_min": 20,
+    "min_days": 330,
+    "n_years": 2,
+    "min_distance_km": 100,
+    "sensitivity_km": [
+      200,
+      100,
+      50,
+      25,
+      10
+    ],
+    "unit_of_independence": "PV system (site_id); independence tested by distance",
+    "claims": [
+      "K2"
+    ]
+  },
+  "descriptor_hash": "7a24bfc59ef5f9b7",
+  "python": "3.14.6",
+  "repeats_override": null,
+  "checks": {
+    "C2": {
+      "id": "C2",
+      "status": "FAIL",
+      "metric": 0.981301421091997,
+      "metric_name": "estimated fraction of eligible systems whose content contradicts the catalogued interval",
+      "detail": {
+        "eligible": 1337,
+        "pvoutput": 1217,
+        "pvoutput_listed": 50,
+        "pvoutput_contradicting": 50,
+        "non_pvoutput": 120,
+        "non_pvoutput_contradicting": 95,
+        "declared": "catalogue-implied interval <= 20 min"
+      }
+    },
+    "C3": {
+      "id": "C3",
+      "status": "CONDITIONAL",
+      "metric": 5,
+      "metric_name": "independent sites at >= 100 km",
+      "detail": {
+        "candidate_units": 24,
+        "sensitivity": {
+          "200 km": 5,
+          "100 km": 5,
+          "50 km": 6,
+          "25 km": 7,
+          "10 km": 7
+        }
+      }
+    },
+    "C4": {
+      "id": "C4",
+      "status": "FAIL",
+      "metric": 0.9583333333333334,
+      "metric_name": "fraction of sites with another within 100 km",
+      "detail": {
+        "dependent_pairs": 69,
+        "test": "great-circle distance below the declared minimum"
+      }
+    },
+    "C1": {
+      "id": "C1",
+      "status": "NA",
+      "metric": null,
+      "metric_name": "not applicable at catalogue level",
+      "detail": {}
+    },
+    "C5": {
+      "id": "C5",
+      "status": "NA",
+      "metric": null,
+      "metric_name": "not applicable at catalogue level",
+      "detail": {}
+    },
+    "C5g": {
+      "id": "C5g",
+      "status": "NA",
+      "metric": null,
+      "metric_name": "not applicable at catalogue level",
+      "detail": {}
+    },
+    "C6": {
+      "id": "C6",
+      "status": "NA",
+      "metric": null,
+      "metric_name": "not applicable at catalogue level",
+      "detail": {}
+    },
+    "C7": {
+      "id": "C7",
+      "status": "NA",
+      "metric": null,
+      "metric_name": "not applicable at catalogue level",
+      "detail": {}
+    },
+    "C8": {
+      "id": "C8",
+      "status": "NA",
+      "metric": null,
+      "metric_name": "not applicable at catalogue level",
+      "detail": {}
+    },
+    "C1d": {
+      "id": "C1d",
+      "status": "NA",
+      "metric": null,
+      "metric_name": "not applicable at catalogue level",
+      "detail": {}
+    }
+  },
+  "claims": {
+    "K2": {
+      "claim": "Generalization to unseen units",
+      "verdict": "CONDITIONAL",
+      "because": [
+        "C3 CONDITIONAL (hard)",
+        "C2 FAIL (soft)",
+        "C4 FAIL (soft)"
+      ]
+    }
+  }
+}

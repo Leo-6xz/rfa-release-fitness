@@ -3,3 +3,6 @@ pvdaq/
 results/
 __pycache__/
 *.pyc
+msu/
+~$*
+*.docx

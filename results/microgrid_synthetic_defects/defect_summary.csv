@@ -1,0 +1,7 @@
+defect,planted,target_check,clean_status,defect_status,detected,off_target_changes
+D1,divergent values,C1,PASS,FAIL,True,
+D2,wrong declared interval,C2,PASS,FAIL,True,
+D3,one unit per class,C3,PASS,FAIL,True,"C5:FAIL->CONDITIONAL, C5g:PASS->NOT_TESTABLE, C6:CONDITIONAL->PASS"
+D4,duplicated units,C4,PASS,FAIL,True,
+D5,class-dependent record length,C6,CONDITIONAL,FAIL,True,
+D6,event class below floor,C7,PASS,FAIL,True,"C5:FAIL->CONDITIONAL, C6:CONDITIONAL->PASS"

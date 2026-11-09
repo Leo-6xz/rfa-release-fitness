@@ -4,7 +4,7 @@ release, when the earlier probe found five attack files sharing the Normal
 solve before onset (agreement 1e-6 to 1e-13)?
 
 For every event unit against the baseline unit it prints, over the pre-onset
-segment, the largest difference under three normalisations:
+segment, the largest difference under three normalizations:
 
     mad   what C4 uses: |a-b| / (1.4826 * MAD of the channel at the physical timescale)
     rms   |a-b| / RMS of the channel (signal magnitude)
@@ -79,6 +79,49 @@ def main():
         pf = "pass" if head < tol else f"reject ({head:.2e})"
         print(f"{u['id']:<24s}{L:>7d} | {m1[0]:>11.3e} {m1[1]:<8s} | {m2[0]:>11.3e} {m2[1]:<8s} | "
               f"{m3[0]:>11.3e} {m3[1]:<8s} | {m4[0]:>10.3e} | {pf}")
+
+    # ---- channel groups: which channels carry the pre-onset mismatch?
+    groups = {}
+    for c in ch:
+        g = "ac (v,i)" if c in set(C.canon(x) for x in desc.get("ac_channels", [])) else c.rstrip("0123456789")
+        groups.setdefault(g, []).append(ch.index(c))
+    print("\npre-onset max |a-b| / RMS(baseline), physical timescale, by channel group")
+    print(f"{'unit':<24s}" + "".join(f"{g:>12s}" for g in groups))
+    for u in ds["units"]:
+        if u is base:
+            continue
+        D, y, _ = C.decimate(u, desc, ch)
+        o = int(np.argmax(y > 0)) if y.max() > 0 else len(y)
+        L = min(o, len(Db))
+        rms_b = np.sqrt(np.nanmean(Db[:L] ** 2, axis=0))
+        with np.errstate(divide="ignore", invalid="ignore"):
+            r = np.nanmax(np.abs(D[:L] - Db[:L]) / rms_b[None, :], axis=0)
+        print(f"{u['id']:<24s}" + "".join(f"{np.nanmax(r[idx]):>12.2e}" for idx in groups.values()))
+
+    # ---- C8 components: pre-onset and post-onset RMS separately
+    cfg = desc.get("differential")
+    if cfg:
+        spec = S.CHECKS["C8"]
+        cols = [ch.index(c) for c in C._match(ch, cfg["channels"])]
+        sc = C.channel_scale(ds, desc)[cols]
+        B = Db[:, cols] / sc
+        print(f"\nC8 on {', '.join(cfg['channels'])}: RMS normalized difference (pre = {spec['pre_samples']} "
+              f"samples before onset; post = first N samples after onset; spec uses N = {spec['post_samples']})")
+        print(f"{'unit':<24s}{'pre':>11s}{'post 20':>11s}{'post 50':>11s}{'post 100':>11s}{'ratio(spec)':>13s}")
+        for u in ds["units"]:
+            if u is base:
+                continue
+            D, y, _ = C.decimate(u, desc, ch)
+            if y.max() == 0:
+                continue
+            o = int(np.argmax(y > 0))
+            A = D[:, cols] / sc
+            p0 = max(0, o - spec["pre_samples"])
+            pre = np.sqrt(np.nanmean((A[p0:o] - B[p0:o]) ** 2))
+            post = {N: np.sqrt(np.nanmean((A[o:o + N] - B[o:o + N]) ** 2)) for N in (20, 50, 100)}
+            ratio = post[spec["post_samples"]] / pre if pre > 0 else float("inf")
+            print(f"{u['id']:<24s}{pre:>11.2e}{post[20]:>11.2e}{post[50]:>11.2e}{post[100]:>11.2e}{ratio:>13.3g}")
+        print("(post 50 / post 100 are shown for diagnosis only; the verdict uses the frozen post window)")
 
     rep = os.path.join("results", desc["name"], "report.json")
     if os.path.exists(rep):

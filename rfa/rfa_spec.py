@@ -25,7 +25,7 @@ CLAIMS below lists, for each claim type, which checks it relies on and how:
               only with the restriction the check names
     testable  only whether the check could be run matters (NOT_TESTABLE ->
               FAIL, anything else -> PASS)
-NA checks are ignored. The claim verdict is the worst of the contributions.
+NA checks are ignored.
 """
 
 import hashlib

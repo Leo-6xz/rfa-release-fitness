@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the paper and this software release."
+title: "rfa: Release-fitness assessment for power-system machine-learning datasets"
+version: 1.0.0
+date-released: 2026-11-09
+license: Apache-2.0
+repository-code: "https://github.com/USERNAME/rfa-release-fitness"
+keywords: [dataset quality, release-fitness, power system security, machine learning, data leakage, microgrids]
+authors:
+  - family-names: Ogar
+    given-names: Emmanuel Ede
+    orcid: "https://orcid.org/0000-0002-1550-3546"
+    affiliation: "Chulalongkorn University"
+  - family-names: Ogiesoba-Eguakun
+    given-names: Osasumwen Cedric
+    orcid: "https://orcid.org/0009-0006-8387-058X"
+    affiliation: "The University of Tulsa"
+  - family-names: Rath
+    given-names: Suman
+    orcid: "https://orcid.org/0000-0002-9012-1919"
+    affiliation: "The University of Tulsa"
+  - family-names: Chaitusaney
+    given-names: Surachai
+    orcid: "https://orcid.org/0000-0002-4194-3342"
+    affiliation: "Chulalongkorn University"

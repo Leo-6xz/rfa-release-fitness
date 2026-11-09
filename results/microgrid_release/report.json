@@ -1,0 +1,349 @@
+{
+  "dataset": "microgrid_release",
+  "generated": "2026-11-06T23:29:11",
+  "spec_version": "1.0.0",
+  "spec_hash": "8ffc444dbc915624",
+  "descriptor": {
+    "name": "microgrid_release",
+    "adapter": "folder_per_stratum",
+    "root": "C:/research/mgxrl/Dataset",
+    "strata": [
+      "Normal",
+      "Additive",
+      "Ramp",
+      "SlowRamp",
+      "Sinusoid",
+      "Stealth",
+      "DoS"
+    ],
+    "null_stratum": "Normal",
+    "file_glob": "*.csv",
+    "time_column": "time",
+    "label_column": "label",
+    "channels": "auto",
+    "ac_channels": [
+      "v1",
+      "v2",
+      "v3",
+      "i1",
+      "i2",
+      "i3"
+    ],
+    "bounds": {
+      "default": 10000000.0
+    },
+    "sample_interval_s": 2e-06,
+    "physical_dt_s": 0.01,
+    "window": 20,
+    "stride": 5,
+    "differential": {
+      "baseline_stratum": "Normal",
+      "channels": [
+        "p_dg",
+        "f_dg"
+      ]
+    },
+    "unit_of_independence": "one CSV file (simulation run) per scenario folder",
+    "claims": [
+      "K1",
+      "K2",
+      "K3",
+      "K4"
+    ]
+  },
+  "descriptor_hash": "3b08e18a1141fa2d",
+  "python": "3.14.6",
+  "repeats_override": null,
+  "checks": {
+    "C1": {
+      "id": "C1",
+      "status": "FAIL",
+      "metric": 0.28945456394801494,
+      "metric_name": "fraction of rows corrupted",
+      "detail": {
+        "rows": 3500007,
+        "corrupt_rows": 1013093,
+        "units_affected": 6,
+        "units": 7,
+        "per_stratum_fraction": {
+          "Normal": 0.21706756586486828,
+          "Additive": 0.4625410749178502,
+          "Ramp": 0.10764178471643057,
+          "SlowRamp": 0.9404101191797617,
+          "Sinusoid": 0.2984274031451937,
+          "Stealth": 9.3999812000376e-05,
+          "DoS": 0.0
+        },
+        "channels_affected": [
+          [
+            "v3",
+            631761,
+            8.23e+152
+          ],
+          [
+            "v1",
+            380420,
+            6.55020124236664e+152
+          ],
+          [
+            "i3",
+            4888,
+            10.9009957251918
+          ],
+          [
+            "i1",
+            3312,
+            1.28811576165615e+152
+          ],
+          [
+            "v2",
+            51,
+            246701108.493646
+          ]
+        ],
+        "max_abs_value": 8.23e+152
+      }
+    },
+    "C1d": {
+      "id": "C1d",
+      "status": "PASS",
+      "metric": 0.0,
+      "metric_name": "fraction of rows corrupted",
+      "detail": {
+        "rows": 3500007,
+        "corrupt_rows": 0,
+        "units_affected": 0,
+        "units": 7,
+        "per_stratum_fraction": {
+          "Normal": 0.0,
+          "Additive": 0.0,
+          "Ramp": 0.0,
+          "SlowRamp": 0.0,
+          "Sinusoid": 0.0,
+          "Stealth": 0.0,
+          "DoS": 0.0
+        },
+        "channels_affected": [],
+        "max_abs_value": 10809.2303
+      }
+    },
+    "C2": {
+      "id": "C2",
+      "status": "PASS",
+      "metric": 1.000000000001,
+      "metric_name": "observed / declared sampling interval (median over units)",
+      "detail": {
+        "declared_interval_s": 2e-06,
+        "units_outside_tolerance": 0,
+        "units": 7,
+        "ratio_range": [
+          1.000000000001,
+          1.000000000001
+        ],
+        "declared_channels_missing": [],
+        "channels_entirely_empty": []
+      }
+    },
+    "C3": {
+      "id": "C3",
+      "status": "FAIL",
+      "metric": 1,
+      "metric_name": "min independent units per stratum",
+      "detail": {
+        "per_stratum": {
+          "Normal": {
+            "declared_units": 1,
+            "independent_units": 1
+          },
+          "Additive": {
+            "declared_units": 1,
+            "independent_units": 1
+          },
+          "Ramp": {
+            "declared_units": 1,
+            "independent_units": 1
+          },
+          "SlowRamp": {
+            "declared_units": 1,
+            "independent_units": 1
+          },
+          "Sinusoid": {
+            "declared_units": 1,
+            "independent_units": 1
+          },
+          "Stealth": {
+            "declared_units": 1,
+            "independent_units": 1
+          },
+          "DoS": {
+            "declared_units": 1,
+            "independent_units": 1
+          }
+        },
+        "declared_units": 7,
+        "independent_units_overall": 7
+      }
+    },
+    "C4": {
+      "id": "C4",
+      "status": "PASS",
+      "metric": 0.0,
+      "metric_name": "fraction of units with a dependent partner",
+      "detail": {
+        "dependent_pairs": 0,
+        "examples": [],
+        "units_comparable": 7,
+        "identity_tol": 1e-06,
+        "test": "identical pre-event trajectory at the physical timescale"
+      }
+    },
+    "C5": {
+      "id": "C5",
+      "status": "FAIL",
+      "metric": 0.9082080200501254,
+      "metric_name": "macro-F1 random minus block",
+      "detail": {
+        "macro_f1": {
+          "random": [
+            0.9736842105263158,
+            0.0372161463782393
+          ],
+          "block": [
+            0.06547619047619048,
+            0.029562826241570122
+          ]
+        },
+        "reference_protocol": "block",
+        "windows": 119,
+        "repeats": 3
+      }
+    },
+    "C5g": {
+      "id": "C5g",
+      "status": "NOT_TESTABLE",
+      "metric": 1,
+      "metric_name": "min independence clusters per stratum",
+      "detail": {
+        "needed": 3
+      }
+    },
+    "C6": {
+      "id": "C6",
+      "status": "FAIL",
+      "metric": 0.6011966057957714,
+      "metric_name": "artefact-only macro-F1 minus chance",
+      "detail": {
+        "artefact_only_macro_f1": 0.738677267248696,
+        "chance_macro_f1": 0.13748066145292454,
+        "features": [
+          "position_in_record",
+          "record_length",
+          "corrupt_fraction_per_channel"
+        ]
+      }
+    },
+    "C7": {
+      "id": "C7",
+      "status": "CONDITIONAL",
+      "metric": 31,
+      "metric_name": "min positive samples per class at the physical timescale",
+      "detail": {
+        "per_class": {
+          "Additive": 31,
+          "Ramp": 31,
+          "SlowRamp": 31,
+          "Sinusoid": 31,
+          "Stealth": 31,
+          "DoS": 31
+        },
+        "physical_dt_s": 0.01
+      }
+    },
+    "C8": {
+      "id": "C8",
+      "status": "CONDITIONAL",
+      "metric": 4,
+      "metric_name": "event classes passing the pre-onset gate",
+      "detail": {
+        "gate_ratio": {
+          "Additive": 4020525.003380452,
+          "Ramp": 225995.67993005572,
+          "SlowRamp": 207247.94389673125,
+          "Sinusoid": 249134.17948657385,
+          "Stealth": 0.9872238708086745,
+          "DoS": 1.6552017693205474
+        },
+        "admissible_classes": [
+          "Additive",
+          "Ramp",
+          "SlowRamp",
+          "Sinusoid"
+        ],
+        "excluded_classes": [
+          "Stealth",
+          "DoS"
+        ],
+        "channels": [
+          "p_dg1",
+          "f_dg1",
+          "p_dg2",
+          "f_dg2",
+          "p_dg3",
+          "f_dg3",
+          "p_dg4",
+          "f_dg4",
+          "p_dg5",
+          "f_dg5",
+          "p_dg6",
+          "f_dg6",
+          "p_dg7",
+          "f_dg7",
+          "p_dg8",
+          "f_dg8",
+          "p_dg9",
+          "f_dg9",
+          "p_dg10",
+          "f_dg10"
+        ],
+        "floor": 10.0
+      }
+    }
+  },
+  "claims": {
+    "K1": {
+      "claim": "In-distribution accuracy",
+      "verdict": "FAIL",
+      "because": [
+        "C1 FAIL (hard)",
+        "C6 FAIL (hard)",
+        "C7 CONDITIONAL (soft)"
+      ]
+    },
+    "K2": {
+      "claim": "Generalization to unseen units",
+      "verdict": "FAIL",
+      "because": [
+        "C1 FAIL (hard)",
+        "C3 FAIL (hard)",
+        "C6 FAIL (hard)",
+        "C5g NOT_TESTABLE (testable)"
+      ]
+    },
+    "K3": {
+      "claim": "Per-class performance",
+      "verdict": "FAIL",
+      "because": [
+        "C1 FAIL (hard)",
+        "C6 FAIL (hard)",
+        "C7 CONDITIONAL (hard)"
+      ]
+    },
+    "K4": {
+      "claim": "Physical-model validation (differential)",
+      "verdict": "CONDITIONAL",
+      "because": [
+        "C8 CONDITIONAL (hard)"
+      ]
+    }
+  }
+}

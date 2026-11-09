@@ -1,0 +1,17 @@
+{
+  "title": "rfa: Release-fitness assessment for power-system machine-learning datasets",
+  "upload_type": "software",
+  "description": "Reference implementation of the release-fitness assessment workflow (specification v1.0.0, hash 8ffc444dbc915624): eight checks with thresholds frozen before analysis, claim-conditional verdicts, dataset descriptors for the cases in the accompanying paper, the planted-defect validation, the coded literature survey of split protocols on the MSU-ORNL datasets, and the scripts that regenerate every figure. Third-party datasets are not redistributed; descriptors and download instructions are provided.",
+  "license": "Apache-2.0",
+  "keywords": ["dataset quality", "release-fitness", "power system security", "machine learning", "data leakage", "microgrids"],
+  "creators": [
+    {"name": "Ogar, Emmanuel Ede", "affiliation": "Chulalongkorn University", "orcid": "0000-0002-1550-3546"},
+    {"name": "Ogiesoba-Eguakun, Osasumwen Cedric", "affiliation": "The University of Tulsa", "orcid": "0009-0006-8387-058X"},
+    {"name": "Rath, Suman", "affiliation": "The University of Tulsa", "orcid": "0000-0002-9012-1919"},
+    {"name": "Chaitusaney, Surachai", "affiliation": "Chulalongkorn University", "orcid": "0000-0002-4194-3342"}
+  ],
+  "related_identifiers": [
+    {"identifier": "10.21227/bmtr-fr76", "relation": "references", "scheme": "doi", "resource_type": "dataset"},
+    {"identifier": "10.1109/ISRCS.2014.6900095", "relation": "references", "scheme": "doi", "resource_type": "publication-conferencepaper"}
+  ]
+}

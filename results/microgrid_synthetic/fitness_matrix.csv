@@ -1,0 +1,4 @@
+claim,name,verdict,because
+K1,In-distribution accuracy,CONDITIONAL,C6 CONDITIONAL (hard)
+K2,Generalization to unseen units,CONDITIONAL,C6 CONDITIONAL (hard)
+K3,Per-class performance,CONDITIONAL,C6 CONDITIONAL (hard)

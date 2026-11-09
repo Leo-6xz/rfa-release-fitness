@@ -5,12 +5,11 @@ A dataset is described by a JSON descriptor (see descriptors/). Two adapters:
 
   folder_per_stratum   <root>/<stratum>/<file>.csv, one file = one declared unit
                        (the IEEE DataPort microgrid release, the synthetic corpus,
-                       and any labelled time-series release with that layout)
+                       and any labeled time-series release with that layout)
   pvdaq_catalogue      catalogue + bucket listings cached by pvdaq_funnel.py;
                        units are systems, independence is spatial
 
-Every threshold comes from rfa_spec.py. Nothing here decides a verdict on its
-own numbers.
+Every threshold comes from rfa_spec.py.
 """
 
 from __future__ import annotations
@@ -92,6 +91,8 @@ def load_dataset(desc: dict, verbose: bool = True) -> dict:
         return load_folder_dataset(desc, verbose)
     if desc["adapter"] == "pvdaq_catalogue":
         return load_pvdaq_catalogue(desc, verbose)
+    if desc["adapter"] == "tabular_grouped":
+        return load_tabular_grouped(desc, verbose)
     raise ValueError(f"unknown adapter {desc['adapter']}")
 
 
@@ -654,6 +655,10 @@ def run_checks(ds, desc, repeats=None, verbose=True):
                         "metric_name": "not applicable at catalogue level", "detail": {}})
         return {r["id"]: r for r in out}
 
+    if ds["kind"] == "tabular":
+        log("  C1-C8 (tabular adapter)")
+        return tabular_checks(ds, desc, repeats)
+
     res = {}
     ds.pop("_windows", None)
     log("  C1 integrity"); res["C1"] = c1_integrity(ds, desc)
@@ -686,3 +691,115 @@ def clone(ds):
     d["units"] = [{k: v for k, v in u.items() if not (isinstance(k, tuple) and k[0] == "_dec")}
                   for u in ds["units"]]
     return d
+
+
+# =========================================================================== tabular releases
+
+def load_tabular_grouped(desc, verbose=True):
+    """Row-level releases without trajectories (e.g. the MSU/ORNL power-system
+    attack datasets). The descriptor names the column that identifies the unit
+    of independence (here the scenario) and maps units to classes."""
+    files = sorted(glob.glob(desc["files"]), key=lambda s: [int(x) if x.isdigit() else x for x in __import__("re").split(r"(\d+)", s)])
+    if not files:
+        raise FileNotFoundError(desc["files"])
+    frames = []
+    for f in files:
+        df = pd.read_csv(f, low_memory=False)
+        df["_file"] = os.path.basename(f)
+        frames.append(df)
+        if verbose:
+            print(f"  loaded {os.path.basename(f):<20s} {len(df):>7,} rows")
+    df = pd.concat(frames, ignore_index=True)
+    ucol = desc["unit_column"]
+    feats = [c for c in df.columns if c not in (ucol, desc.get("label_column"), "_file")]
+    if desc.get("channels") not in (None, "auto"):
+        feats = [c for c in desc["channels"]]
+    X = df.reindex(columns=feats).apply(pd.to_numeric, errors="coerce").to_numpy("float64")
+    units = df[ucol].to_numpy()
+    cmap = {}
+    for cls, members in desc["class_of_unit"].items():
+        for m in members:
+            cmap[m] = cls
+    default = desc.get("default_class")
+    cls = np.array([cmap.get(u, default) for u in units], dtype=object)
+    if any(c is None for c in cls):
+        raise ValueError("some units have no class in class_of_unit and no default_class")
+    return {"kind": "tabular", "X": X, "unit": units, "cls": cls, "channels": feats,
+            "missing_channels": [c for c in feats if c not in df.columns],
+            "strata": desc["strata"], "files": [os.path.basename(f) for f in files]}
+
+
+def tabular_checks(ds, desc, repeats=None):
+    s1, s3, s5, s6, s7 = (S.CHECKS[k] for k in ("C1", "C3", "C5", "C6", "C7"))
+    repeats = repeats or s5["repeats"]
+    X = ds["X"]
+    bounds = np.array([bound_for(desc, c) for c in ds["channels"]])
+    bad = ~np.isfinite(X) | (np.abs(X) > bounds[None, :])
+    rows_bad = bad.any(axis=1)
+    frac = float(rows_bad.mean())
+    null = desc.get("null_stratum", ds["strata"][0])
+    res = {}
+    res["C1"] = {"id": "C1", "status": S.band_max(frac, s1["pass_max"], s1["cond_max"]), "metric": frac,
+                 "metric_name": "fraction of rows corrupted",
+                 "detail": {"rows": int(len(X)), "corrupt_rows": int(rows_bad.sum()),
+                            "nonfinite_cells": int((~np.isfinite(X)).sum()),
+                            "channels_affected": int(bad.any(axis=0).sum()),
+                            "per_class_fraction": {c: float(rows_bad[ds["cls"] == c].mean()) for c in ds["strata"]},
+                            "per_unit_fraction": {str(u): float(rows_bad[ds["unit"] == u].mean())
+                                                  for u in sorted(set(ds["unit"]), key=str)}}}
+    res["C1d"] = {"id": "C1d", "status": "NA", "metric": None, "metric_name": "", "detail": {}}
+    empty = [c for j, c in enumerate(ds["channels"]) if np.isnan(X[:, j]).all()]
+    ok = not ds["missing_channels"] and not empty
+    res["C2"] = {"id": "C2", "status": "PASS" if ok else "FAIL", "metric": len(ds["channels"]),
+                 "metric_name": "declared channels present and non-empty (no sampling interval declared)",
+                 "detail": {"missing": ds["missing_channels"], "empty": empty}}
+    per = {s: int(len(set(ds["unit"][ds["cls"] == s]))) for s in ds["strata"]}
+    m = min(per.values())
+    res["C3"] = {"id": "C3", "status": S.band_min(m, s3["pass_min"], s3["cond_min"]), "metric": m,
+                 "metric_name": "min declared units per class (dependence untestable, so an upper bound)",
+                 "detail": {"per_class": per}}
+    res["C4"] = {"id": "C4", "status": "NA", "metric": None,
+                 "metric_name": "untestable: no trajectories or coordinates released", "detail": {}}
+
+    # model inputs: corrupt cells masked
+    Xm = np.where(bad, np.nan, X)
+    y = np.array([ds["strata"].index(c) for c in ds["cls"]])
+    clusters = pd.factorize(pd.Series(ds["unit"]).astype(str))[0]
+    meta = pd.DataFrame({"y": y, "stratum": ds["cls"], "cluster": clusters})
+    rr, gg = [], []
+    for r in range(repeats):
+        tr, te = split_random(meta, r, s5["test_fraction"])
+        rr.append(fit_score(Xm, y, tr, te, r))
+        g = split_grouped(meta, r, s5["test_fraction"], s5["min_clusters_per_stratum"])
+        if g is not None:
+            gg.append(fit_score(Xm, y, *g, r))
+    summ = {"random": (float(np.mean(rr)), float(np.std(rr)))}
+    if gg:
+        summ["grouped"] = (float(np.mean(gg)), float(np.std(gg)))
+    gap = summ["random"][0] - summ["grouped"][0] if gg else None
+    res["C5"] = {"id": "C5", "status": S.band_max(gap, s5["pass_max"], s5["cond_max"]), "metric": gap,
+                 "metric_name": "macro-F1 random minus grouped (whole units held out)",
+                 "detail": {"macro_f1": summ, "per_repeat": {"random": rr, "grouped": gg}, "repeats": repeats}}
+    res["C5g"] = {"id": "C5g", "status": "PASS" if gg else "NOT_TESTABLE", "metric": m,
+                  "metric_name": "min units per class", "detail": {"needed": s5["min_clusters_per_stratum"]}}
+    # shortcut probe: corruption pattern only (no record position or length exists for row-level data)
+    Xa = bad.astype(float)
+    from sklearn.dummy import DummyClassifier
+    art, chance = [], []
+    for r in range(repeats):
+        tr, te = split_random(meta, r, s5["test_fraction"])
+        art.append(fit_score(Xa, y, tr, te, r))
+        for k in range(s6["dummy_seeds"]):
+            d = DummyClassifier(strategy="stratified", random_state=1000 * r + k).fit(Xa[tr], y[tr])
+            chance.append(macro_f1(y[te], d.predict(Xa[te])))
+    a, c = float(np.mean(art)), float(np.mean(chance))
+    res["C6"] = {"id": "C6", "status": S.band_max(a - c, s6["pass_max"], s6["cond_max"]), "metric": a - c,
+                 "metric_name": "artefact-only (corruption pattern) macro-F1 minus chance",
+                 "detail": {"artefact_only_macro_f1": a, "chance_macro_f1": c,
+                            "features": "per-column non-finite/out-of-bound indicator"}}
+    counts = {s: int((ds["cls"] == s).sum()) for s in ds["strata"] if s != null}
+    mm = min(counts.values())
+    res["C7"] = {"id": "C7", "status": S.band_min(mm, s7["pass_min"], s7["cond_min"]), "metric": mm,
+                 "metric_name": "min event rows per class", "detail": {"per_class": counts}}
+    res["C8"] = {"id": "C8", "status": "NA", "metric": None, "metric_name": "no baseline declared", "detail": {}}
+    return res
