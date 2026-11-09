@@ -4,7 +4,7 @@ title: "rfa: Release-fitness assessment for power-system machine-learning datase
 version: 1.0.0
 date-released: 2026-11-09
 license: Apache-2.0
-repository-code: "https://github.com/USERNAME/rfa-release-fitness"
+repository-code: "https://github.com/Leo-6xz/rfa-release-fitness"
 keywords: [dataset quality, release-fitness, power system security, machine learning, data leakage, microgrids]
 authors:
   - family-names: Ogar
