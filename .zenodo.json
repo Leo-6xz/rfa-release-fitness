@@ -1,5 +1,5 @@
 {
-  "title": "rfa: Release-fitness assessment for power-system machine-learning datasets",
+  "title": "Release-Fitness Assessment Workflow for Power-System Machine-Learning Datasets",
   "upload_type": "software",
   "description": "Reference implementation of the release-fitness assessment workflow (specification v1.0.0, hash 8ffc444dbc915624): eight checks with thresholds frozen before analysis, claim-conditional verdicts, dataset descriptors for the cases in the accompanying paper, the planted-defect validation, the coded literature survey of split protocols on the MSU-ORNL datasets, and the scripts that regenerate every figure. Third-party datasets are not redistributed; descriptors and download instructions are provided.",
   "license": "Apache-2.0",
