@@ -40,7 +40,7 @@ No third-party data is redistributed here. Obtain each dataset from its source a
 |Labeled cyber-physical microgrid dataset|IEEE DataPort, doi:10.21227/bmtr-fr76|`microgrid\\\_release.json`|
 |MSU–ORNL power-system attack datasets (multiclass, 15 files)|Mirror pinned at commit `0e07bddd072b96c53dece691270002db5cb689ad` of github.com/VictoKu1/IndustrialControlSystemCyberAttackDetectingCourse, `Class/multiclass/data1.csv` … `data15.csv`|`msu\\\_power\\\_system.json`|
 |NREL PVDAQ public systems|Open Energy Data Initiative, https://registry.opendata.aws/oedi-data-lake/|`pvdaq.json`|
-|Synthetic 280-run microgrid corpus|Synthetic Cyberattack Corpus for Distributed Secondary Control of a Ten-Generator Islanded Microgrid (280 Independent Runs), Zenodo, 2026. \[Data set]. \[Online]. Available: https://doi.org/10.5281/zenodo.24082860|`microgrid\\\_synthetic.json`|
+|Synthetic 280-run microgrid corpus|Synthetic Cyberattack Corpus for Distributed Secondary Control of a Ten-Generator Islanded Microgrid (280 Independent Runs), Zenodo, 2026. \[Data set]. \[Online]. Available: https://doi.org/10.5281/zenodo.24082859|`microgrid\\\_synthetic.json`|
 
 For MSU–ORNL, place the 15 CSV files in `msu/multiclass/`; the 15 files hold 78,377 rows in total, and `data2.csv` has 5,069.
 
