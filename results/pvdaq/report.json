@@ -1,8 +1,8 @@
 {
   "dataset": "pvdaq",
-  "generated": "2026-11-07T07:48:24",
-  "spec_version": "1.0.0",
-  "spec_hash": "8ffc444dbc915624",
+  "generated": "2026-11-14T06:48:18",
+  "spec_version": "1.1.0",
+  "spec_hash": "60f433f1d2401c8d",
   "descriptor": {
     "name": "pvdaq",
     "adapter": "pvdaq_catalogue",
@@ -32,14 +32,16 @@
     "C2": {
       "id": "C2",
       "status": "FAIL",
-      "metric": 0.981301421091997,
+      "metric": 0.9827715355805243,
       "metric_name": "estimated fraction of eligible systems whose content contradicts the catalogued interval",
       "detail": {
-        "eligible": 1337,
+        "catalogue_entries": 1862,
+        "unique_systems": 1860,
+        "eligible": 1335,
         "pvoutput": 1217,
         "pvoutput_listed": 50,
         "pvoutput_contradicting": 50,
-        "non_pvoutput": 120,
+        "non_pvoutput": 118,
         "non_pvoutput_contradicting": 95,
         "declared": "catalogue-implied interval <= 20 min"
       }
@@ -50,7 +52,7 @@
       "metric": 5,
       "metric_name": "independent sites at >= 100 km",
       "detail": {
-        "candidate_units": 24,
+        "candidate_units": 22,
         "sensitivity": {
           "200 km": 5,
           "100 km": 5,
@@ -63,10 +65,10 @@
     "C4": {
       "id": "C4",
       "status": "FAIL",
-      "metric": 0.9583333333333334,
+      "metric": 0.9545454545454546,
       "metric_name": "fraction of sites with another within 100 km",
       "detail": {
-        "dependent_pairs": 69,
+        "dependent_pairs": 56,
         "test": "great-circle distance below the declared minimum"
       }
     },

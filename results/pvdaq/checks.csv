@@ -1,9 +1,9 @@
 check,name,status,metric,metric_name
 C1,Integrity,NA,,not applicable at catalogue level
 C1d,Integrity,NA,,not applicable at catalogue level
-C2,Metadata fidelity,FAIL,0.981301421091997,estimated fraction of eligible systems whose content contradicts the catalogued interval
+C2,Metadata fidelity,FAIL,0.9827715355805243,estimated fraction of eligible systems whose content contradicts the catalogued interval
 C3,Effective sample size,CONDITIONAL,5.0,independent sites at >= 100 km
-C4,Unit of independence,FAIL,0.9583333333333334,fraction of sites with another within 100 km
+C4,Unit of independence,FAIL,0.9545454545454546,fraction of sites with another within 100 km
 C5,Split-protocol sensitivity,NA,,not applicable at catalogue level
 C5g,Split-protocol sensitivity,NA,,not applicable at catalogue level
 C6,Shortcut probe,NA,,not applicable at catalogue level

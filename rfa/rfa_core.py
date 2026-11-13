@@ -581,10 +581,15 @@ MIN_PER_YEAR = 525_600.0
 def load_pvdaq_catalogue(desc, verbose=True):
     cat = pd.read_csv(desc["catalogue"])
     cat = cat.loc[:, ~cat.columns.str.startswith("Unnamed")]
+    # the catalogue lists some systems more than once; count each system once
+    n_entries = len(cat)
+    cat = cat.drop_duplicates(subset="system_id", keep="first").reset_index(drop=True)
+    if verbose:
+        print(f"PVDAQ catalogue: {n_entries:,} entries, {len(cat):,} unique systems")
     for c in ("years", "number_records", "available_sensor_channels", "latitude", "longitude"):
         cat[c] = pd.to_numeric(cat[c], errors="coerce")
     cache = json.load(open(desc["listing_cache"]))
-    return {"kind": "catalogue", "cat": cat, "cache": cache}
+    return {"kind": "catalogue", "cat": cat, "cache": cache, "n_entries": n_entries}
 
 
 def _usable_years(summary, min_days, n_years):
@@ -621,7 +626,8 @@ def pvdaq_checks(ds, desc):
     est = (pv_rate * len(pvo) + sum(non_list)) / len(elig) if pv_rate is not None else None
     c2 = {"id": "C2", "status": S.band_max(est, 0.0, s2["contradiction_cond_max"]), "metric": est,
           "metric_name": "estimated fraction of eligible systems whose content contradicts the catalogued interval",
-          "detail": {"eligible": len(elig), "pvoutput": len(pvo), "pvoutput_listed": len(pv_seen),
+          "detail": {"catalogue_entries": ds.get("n_entries"), "unique_systems": len(cat),
+                     "eligible": len(elig), "pvoutput": len(pvo), "pvoutput_listed": len(pv_seen),
                      "pvoutput_contradicting": int(sum(pv_seen)), "non_pvoutput": len(non),
                      "non_pvoutput_contradicting": int(sum(non_list)),
                      "declared": f"catalogue-implied interval <= {desc['max_interval_min']} min"}}
