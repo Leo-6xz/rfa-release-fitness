@@ -1,0 +1,5 @@
+claim,name,verdict,because
+K1,In-distribution accuracy,FAIL,C1 FAIL (hard); C6 FAIL (soft); C7 CONDITIONAL (soft)
+K2,Generalization to unseen units,FAIL,C1 FAIL (hard); C3 FAIL (hard); C6 FAIL (soft); C5g NOT_TESTABLE (testable)
+K3,Per-class performance,FAIL,C1 FAIL (hard); C7 CONDITIONAL (hard); C6 FAIL (soft)
+K4,Physical-model validation (differential),CONDITIONAL,C8 CONDITIONAL (hard)

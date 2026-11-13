@@ -1,0 +1,11 @@
+check,name,status,metric,metric_name
+C1,Integrity,FAIL,0.28945456394801494,fraction of rows corrupted
+C1d,Integrity,PASS,0.0,fraction of rows corrupted
+C2,Metadata fidelity,PASS,1.000000000001,observed / declared sampling interval (median over units)
+C3,Effective sample size,FAIL,1.0,min independent units per stratum
+C4,Unit of independence,PASS,0.0,fraction of units with a dependent partner
+C5,Split-protocol sensitivity,FAIL,0.9082080200501254,macro-F1 random minus block
+C5g,Split-protocol sensitivity,NOT_TESTABLE,1.0,min independence clusters per stratum
+C6,Shortcut probe,FAIL,0.6011966057957714,artefact-only macro-F1 minus chance
+C7,Per-class floor,CONDITIONAL,31.0,min positive samples per class at the physical timescale
+C8,Differential admissibility,CONDITIONAL,4.0,event classes passing the pre-onset gate

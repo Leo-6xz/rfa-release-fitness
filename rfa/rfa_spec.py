@@ -8,7 +8,9 @@ results were seen. Commit this file, and note the hash, BEFORE running the
 final analysis. Changing any value changes the hash.
 
 Verdict scale for a check:
-    PASS          the property holds
+    PASS          no defect detected: the property holds as far as the check can
+                  test it (for the model-based checks C5 and C6 this is a negative
+                  result under the tested features and protocol, not proof of absence)
     CONDITIONAL   the property holds only partly; a claim relying on it must
                   carry the stated restriction
     FAIL          the property does not hold
@@ -31,8 +33,12 @@ NA checks are ignored.
 import hashlib
 import json
 
-SPEC_VERSION = "1.0.0"
-FROZEN_ON = "2026-11-07"
+SPEC_VERSION = "1.1.0"
+FROZEN_ON = "2026-11-13"
+# 1.1.0: C6 moved from hard to soft for K1-K3 after co-author review. A
+# positive shortcut probe qualifies an accuracy claim; it does not veto it.
+# Recomputing every reported verdict under 1.1.0 changes none of them
+# (rfa/reverdict.py). 1.0.0 hash: 8ffc444dbc915624.
 
 CHECKS = {
     "C1": {
@@ -144,11 +150,11 @@ MODEL = {
 
 CLAIMS = {
     "K1": {"name": "In-distribution accuracy",
-           "hard": ["C1", "C6"], "soft": ["C2", "C7"], "testable": []},
+           "hard": ["C1"], "soft": ["C2", "C6", "C7"], "testable": []},
     "K2": {"name": "Generalization to unseen units",
-           "hard": ["C1", "C3", "C6"], "soft": ["C2", "C4"], "testable": ["C5g"]},
+           "hard": ["C1", "C3"], "soft": ["C2", "C4", "C6"], "testable": ["C5g"]},
     "K3": {"name": "Per-class performance",
-           "hard": ["C1", "C6", "C7"], "soft": ["C2"], "testable": []},
+           "hard": ["C1", "C7"], "soft": ["C2", "C6"], "testable": []},
     "K4": {"name": "Physical-model validation (differential)",
            "hard": ["C1d", "C8"], "soft": ["C2"], "testable": []},
 }
