@@ -6,7 +6,7 @@ Reference implementation of the release-fitness assessment described in
 
 The workflow evaluates a dataset release, not a model trained on it. Eight checks (C1–C8), with thresholds fixed and hash-stamped before analysis, issue a PASS / CONDITIONAL / FAIL verdict for each claim a release is meant to support (K1 in-distribution accuracy, K2 generalization to unseen units, K3 per-class performance, K4 physical-model validation).
 
-**Specification:** version 1.1.0, hash `60f433f1d2401c8d`, frozen 2026-11-13. The reports in `results/` were produced under version 1.0.0 (hash `8ffc444dbc915624`, frozen 2026-11-07) and record that hash. Version 1.1.0 changes only a verdict rule (C6 from hard to soft for the accuracy claims); `python rfa/reverdict.py` recomputes every verdict from the stored check results under the current specification and confirms that none changes. See `rfa/SPEC.md`. `python rfa/rfa_spec.py` prints the hash of your copy.
+**Specification:** version 1.1.0, hash 60f433f1d2401c8d, frozen 2026-11-13. The reports in results/ were produced under version 1.0.0 (hash 8ffc444dbc915624, frozen 2026-11-07), except results/microgrid_release_v110, a full rerun of the microgrid release under 1.1.0 that reproduces every check value. Version 1.1.0 changes only a verdict rule (C6 from hard to soft for the accuracy claims) and corrects two edge cases in C8 that affect no reported ratio; python rfa/reverdict.py recomputes every verdict from the stored check results under the current specification and confirms that none changes. See rfa/SPEC.md. python rfa/rfa_spec.py prints the hash of your copy.
 
 ## Contents
 
