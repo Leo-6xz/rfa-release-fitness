@@ -6,7 +6,7 @@ Reference implementation of the release-fitness assessment described in
 
 The workflow evaluates a dataset release, not a model trained on it. Eight checks (C1–C8), with thresholds fixed and hash-stamped before analysis, issue a PASS / CONDITIONAL / FAIL verdict for each claim a release is meant to support (K1 in-distribution accuracy, K2 generalization to unseen units, K3 per-class performance, K4 physical-model validation).
 
-**Frozen specification:** version 1.0.0, hash `8ffc444dbc915624`, frozen 2026-11-07. Every report in `results/` records the spec hash it was produced under. `python rfa/rfa_spec.py` prints the hash of your copy.
+**Specification:** version 1.1.0, hash `60f433f1d2401c8d`, frozen 2026-11-13. The reports in `results/` were produced under version 1.0.0 (hash `8ffc444dbc915624`, frozen 2026-11-07) and record that hash. Version 1.1.0 changes only a verdict rule (C6 from hard to soft for the accuracy claims); `python rfa/reverdict.py` recomputes every verdict from the stored check results under the current specification and confirms that none changes. See `rfa/SPEC.md`. `python rfa/rfa_spec.py` prints the hash of your copy.
 
 ## Contents
 
@@ -15,6 +15,8 @@ The workflow evaluates a dataset release, not a model trained on it. Eight check
 |`rfa/rfa_spec.py`, `rfa/SPEC.md`|The frozen specification: checks, thresholds, claim dependencies|
 |`rfa/rfa_core.py`|Dataset adapters and the eight checks|
 |`rfa/fitness_report.py`|Runs the assessment on one dataset descriptor|
+|`rfa/reverdict.py`|Recomputes claim verdicts from stored check results under the current specification|
+|`tests/test_c8.py`|Checks the C8 gate on constructed records, including identical and exactly matching ones|
 |`rfa/inject_defects.py`|Plants defects D1–D6 in a clean corpus and checks which check catches each|
 |`rfa/diagnose_independence.py`, `rfa/msu_file_holdout.py`|Read-only diagnostics used in the paper's discussion; they change no verdict|
 |`rfa/make_test_corpus.py`|Builds small stand-in corpora for testing the code; not used for the paper|

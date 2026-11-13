@@ -1,6 +1,10 @@
-# Release-fitness specification v1.0.0
+# Release-fitness specification v1.1.0
 
-Frozen 2026-11-07. Hash `8ffc444dbc915624` (printed by `python rfa_spec.py`; recorded in every report). The thresholds below were fixed before the final analysis was run. Changing any of them changes the hash.
+Frozen 2026-11-13. Hash `60f433f1d2401c8d` (printed by `python rfa_spec.py`; recorded in every report). The thresholds below were fixed before the final analysis was run. Changing any of them changes the hash.
+
+**Change from v1.0.0** (frozen 2026-11-07, hash `8ffc444dbc915624`): after co-author review, C6 moved from hard to soft for K1–K3. A positive shortcut probe shows an artefact the reference model can exploit under the tested protocol, which qualifies an accuracy claim; a negative probe does not establish that no shortcut exists. Recomputing every reported verdict from the stored check results under v1.1.0 (`rfa/reverdict.py`) changes none of them: each public-release FAIL rests on a model-free check (C1, and C3 for K2). No threshold changed.
+
+**Verdict meaning.** PASS means no defect was detected. For the model-free checks (C1–C4, C7, C8) the check measures the property directly. For the model-based checks (C5, C6) it is a negative result under the reference model, the tested features and the tested protocol, not proof of absence.
 
 ## Checks
 
@@ -26,7 +30,7 @@ C1d is C1 restricted to the channels a differential comparison uses. C5g records
 - **C5 Split-protocol sensitivity.** If the protocol moves the score by more than run-to-run noise, a random-split number is not evidence of generalisation.
 - **C6 Shortcut probe.** If the label can be recovered without any physical signal, a model can score well without learning the phenomenon.
 - **C7 Per-class floor.** About 96 independent samples bound a per-class recall estimate to a 95% half-width of 0.10 (Wilson, p = 0.5); below 30 the interval spans most of [0, 1]. Samples within a trajectory are correlated, so this floor is necessary, not sufficient.
-- **C8 Differential admissibility.** A differential (event minus baseline) comparison isolates the event only if the two records agree before it; the post-onset divergence must exceed the pre-onset mismatch by an order of magnitude.
+- **C8 Differential admissibility.** A differential (event minus baseline) comparison isolates the event only if the two records agree before it; the post-onset divergence must exceed the pre-onset mismatch by an order of magnitude. When the records agree exactly before onset, the event is admissible only if they then differ; identical records fail.
 
 ## Claims
 
@@ -34,9 +38,9 @@ A dataset is fit for a claim, not in the abstract. *Hard*: the check's verdict p
 
 | Claim | Hard | Soft | Testable |
 |---|---|---|---|
-| K1 In-distribution accuracy | C1, C6 | C2, C7 | – |
-| K2 Generalization to unseen units | C1, C3, C6 | C2, C4 | C5g |
-| K3 Per-class performance | C1, C6, C7 | C2 | – |
+| K1 In-distribution accuracy | C1 | C2, C6, C7 | – |
+| K2 Generalization to unseen units | C1, C3 | C2, C4, C6 | C5g |
+| K3 Per-class performance | C1, C7 | C2, C6 | – |
 | K4 Physical-model validation (differential) | C1d, C8 | C2 | – |
 
 ## Reference model

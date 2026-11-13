@@ -549,12 +549,18 @@ def c8_differential(ds, desc):
             p0 = max(0, o - spec["pre_samples"])
             pre = np.sqrt(np.nanmean((D[p0:o] - B[p0:o]) ** 2)) if o > p0 else np.nan
             post = np.sqrt(np.nanmean((D[o:o + spec["post_samples"]] - B[o:o + spec["post_samples"]]) ** 2))
-            if best is None or (np.isfinite(pre) and pre < best[0]):
+            # keep the baseline that agrees best before onset; a baseline whose
+            # pre-onset difference is undefined (NaN) can never be chosen
+            if np.isfinite(pre) and (best is None or pre < best[0]):
                 best = (pre, post)
-        if best is None or not np.isfinite(best[0]):
+        if best is None:
             ratio = None
+        elif best[0] > 0:
+            ratio = float(best[1] / best[0])
         else:
-            ratio = float(best[1] / best[0]) if best[0] > 0 else float("inf")
+            # pre-onset agreement is exact: admissible only if the records then
+            # diverge; identical event and baseline records give ratio 0 (fail)
+            ratio = float("inf") if best[1] > 0 else 0.0
         per.setdefault(u["stratum"], []).append(ratio)
     stat = {s: (float(np.median([r for r in v if r is not None])) if any(r is not None for r in v) else None)
             for s, v in per.items()}
